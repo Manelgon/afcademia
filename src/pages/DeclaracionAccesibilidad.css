@@ -1,0 +1,404 @@
+/* Estilos específicos para la página de Declaración de Accesibilidad */
+.accessibility-hero {
+  background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+  color: white;
+  padding: 8rem 0 3rem 0;
+  text-align: center;
+}
+
+.accessibility-hero h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+}
+
+.accessibility-hero p {
+  font-size: 1.25rem;
+  color: white;
+  margin-bottom: 1.5rem;
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.accessibility-badge {
+  display: inline-block;
+  background: rgba(44, 109, 164, 0.5);
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  color: white;
+  font-weight: 600;
+}
+
+.accessibility-main {
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.accessibility-container {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 4rem 1rem;
+}
+
+.accessibility-content {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 3rem 3rem 3rem;
+}
+
+.accessibility-section {
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+.accessibility-section:first-child {
+  margin-top: 0;
+}
+
+.accessibility-text {
+  color: #374151;
+  line-height: 1.625;
+  font-size: 1.125rem;
+  text-align: justify;
+}
+
+.accessibility-text-intro {
+  color: #374151;
+  line-height: 1.625;
+  font-size: 1.125rem;
+  text-align: justify;
+  margin-bottom: 1rem;
+}
+
+.accessibility-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--azul-oscuro);
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--celeste-claro);
+  padding-bottom: 0.75rem;
+}
+
+.accessibility-card {
+  padding: 0.15rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid;
+}
+
+.accessibility-card.blue {
+  background: #f0f8ff;
+  border-left-color: var(--azul-medio);
+}
+
+.accessibility-card.green {
+  background: #f0f8ff;
+  border-left-color: var(--azul-medio);
+}
+
+.accessibility-card.teal {
+  background: #f0f8ff;
+  border-left-color: var(--azul-medio);
+}
+
+.accessibility-card.orange {
+  background: #f0f8ff;
+  border-left-color: var(--azul-medio);
+}
+
+.accessibility-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.accessibility-card.blue h3 {
+  color: var(--azul-oscuro);
+}
+
+.accessibility-card.green h3 {
+  color: var(--azul-oscuro);
+}
+
+.accessibility-card.teal h3 {
+  color: var(--azul-oscuro);
+}
+
+.accessibility-card.orange h3 {
+  color: var(--azul-oscuro);
+}
+
+.accessibility-card p {
+  color: #374151;
+  line-height: 1.625;
+  text-align: justify;
+}
+
+.accessibility-icon {
+  color: var(--naranja-vibrante);
+  font-size: 1.25rem;
+}
+
+/* Tabla de características de accesibilidad */
+.accessibility-table-container {
+  overflow-x: auto;
+  margin-top: 2rem;
+}
+
+.accessibility-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 0.5rem;
+}
+
+.accessibility-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+.accessibility-table td:first-child {
+  background: #f0f8ff;
+  border-left: 4px solid var(--azul-medio);
+  font-weight: 700;
+  color: var(--azul-oscuro);
+  width: 80px;
+  min-width: 80px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.accessibility-table td:last-child {
+  color: #374151;
+  line-height: 1.625;
+}
+
+.accessibility-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.accessibility-table-container h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--azul-oscuro);
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+/* Para tablas con texto en primera columna en lugar de emojis */
+.accessibility-table.text-table td:first-child {
+  width: 200px;
+  min-width: 200px;
+  text-align: left;
+  font-size: 1rem;
+}
+
+/* Estilos del grid ya no necesarios - removidos para usar tabla */
+
+/* Herramientas de accesibilidad */
+.accessibility-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.accessibility-tool {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+  color: var(--azul-medio);
+}
+
+.tool-name {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Lista de navegadores */
+.browser-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.browser-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.browser-list li:last-child {
+  border-bottom: none;
+}
+
+/* Atajos de teclado */
+.keyboard-shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #f3f4f6;
+  border-radius: 0.375rem;
+}
+
+.shortcut-item kbd {
+  background: #374151;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.shortcut-item span {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Recursos de accesibilidad */
+.accessibility-resources {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.resource-card {
+  padding: 0.15rem 1rem;
+  background: #f0f8ff;
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--azul-medio);
+  border: 1px solid #e2e8f0;
+}
+
+.resource-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--azul-oscuro);
+  margin-bottom: 1rem;
+}
+
+.resource-card p {
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--azul-medio);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.resource-link:hover {
+  background: var(--azul-oscuro);
+}
+
+/* Email de contacto */
+.contact-email {
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.contact-email strong {
+  color: var(--azul-oscuro);
+  font-size: 1.125rem;
+}
+
+/* Footer de accesibilidad */
+.accessibility-footer {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.accessibility-footer-badge {
+  background: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.accessibility-footer-text {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.accessibility-standards {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .accessibility-hero {
+    padding: 2rem 1rem 3rem 1rem;
+  }
+  
+  .accessibility-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .accessibility-content {
+    padding: 1rem 2rem 2rem 2rem;
+  }
+  
+  .accessibility-container {
+    padding: 2rem 1rem;
+  }
+  
+  /* Ya está configurado como columna única */
+  
+  .accessibility-tools-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .accessibility-resources {
+    grid-template-columns: 1fr;
+  }
+  
+  .keyboard-shortcuts {
+    gap: 0.75rem;
+  }
+  
+  .shortcut-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+}
