@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../lib/supabase';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -95,36 +96,61 @@ const Contact = () => {
       return;
     }
 
-    // ---- ENVÍO ----
+    // ---- ENVÍO A SUPABASE (3 Tablas) ----
     try {
-      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
+      // 1. Insertar en 'leads'
+      const { data: lead, error: leadError } = await supabase
+        .from('leads')
+        .insert([{
+          nombre: formData.nombre,
+          email: formData.email,
+          whatsapp: cleanedPhone,
+          empresa_nombre: formData.despacho,
+          source: 'AFC Landing Page'
+        }])
+        .select()
+        .single();
 
-      if (!webhookUrl) {
-        throw new Error('URL del webhook no configurada');
+      if (leadError) {
+        // Si el error es por email duplicado, intentamos obtener el lead existente
+        if (leadError.code === '23505') {
+          const { data: existingLead } = await supabase
+            .from('leads')
+            .select('id')
+            .eq('email', formData.email)
+            .single();
+
+          if (!existingLead) throw leadError;
+          var leadId = existingLead.id;
+        } else {
+          throw leadError;
+        }
+      } else {
+        var leadId = lead.id;
       }
 
-      const dataToSend = {
-        nombre: formData.nombre,
-        email: formData.email,
-        telefono: cleanedPhone,
-        despacho: formData.despacho,
-        comunidades: formData.comunidades,
-        automatizar: formData.automatizar,
-        timestamp: new Date().toISOString(),
-        source: 'AFC Landing Page'
-      };
+      // 2. Insertar en 'segmentacion_despacho'
+      const { error: segError } = await supabase
+        .from('segmentacion_despacho')
+        .upsert([{
+          lead_id: leadId,
+          num_comunidades: formData.comunidades,
+          objetivo_automatizacion: formData.automatizar
+        }], { onConflict: 'lead_id' });
 
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend)
-      });
+      if (segError) console.error('Error en segmentación:', segError);
 
-      if (!response.ok) {
-        throw new Error('Error del servidor');
-      }
+      // 3. Insertar en 'flujos_embudo'
+      const { error: flujoError } = await supabase
+        .from('flujos_embudo')
+        .insert([{
+          lead_id: leadId,
+          nombre_flujo: 'formulario web',
+          status_actual: 'nuevo',
+          tags_proceso: ['nuevo']
+        }]);
+
+      if (flujoError) console.error('Error en flujo:', flujoError);
 
       // éxito total
       setSubmitStatus('success');
@@ -142,7 +168,7 @@ const Contact = () => {
       });
 
     } catch (err) {
-      console.error('Error al enviar el formulario:', err);
+      console.error('Error al procesar el registro:', err);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -287,10 +313,10 @@ const Contact = () => {
           cursor: not-allowed !important;
         }
       `}</style>
-      
-      <section 
-        id="clase-gratuita" 
-        className="py-16 lg:py-20" 
+
+      <section
+        id="clase-gratuita"
+        className="py-16 lg:py-20"
         style={{
           background: 'linear-gradient(135deg, #003865 0%, #2C6DA4 100%)',
           color: 'white'
@@ -298,7 +324,7 @@ const Contact = () => {
       >
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
           <div className="afc-main-grid">
-            
+
             {/* Texto y beneficios */}
             <div className="afc-text-section">
               <h2 className="afc-title">
@@ -334,16 +360,16 @@ const Contact = () => {
 
             {/* Formulario */}
             <div className="afc-form-wrapper">
-              <h3 style={{ 
-                fontSize: '1.75rem', 
-                fontWeight: 'bold', 
-                marginBottom: '1.5rem', 
+              <h3 style={{
+                fontSize: '1.75rem',
+                fontWeight: 'bold',
+                marginBottom: '1.5rem',
                 textAlign: 'center',
                 color: '#1e3a8a'
               }}>
                 Solicita tu clase gratuita
               </h3>
-              
+
               <div className="afc-form-container">
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {/* Honeypot - campo oculto anti-bots */}
@@ -356,37 +382,37 @@ const Contact = () => {
                     tabIndex="-1"
                     autoComplete="off"
                   />
-                  
+
                   <div className="afc-form-grid">
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="nombre"
-                      placeholder="Nombre completo *" 
+                      placeholder="Nombre completo *"
                       className="afc-input"
                       value={formData.nombre}
                       onChange={handleChange}
                       disabled={isSubmitting || isFormLocked}
-                      required 
+                      required
                     />
-                    
+
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <input 
-                        type="email" 
+                      <input
+                        type="email"
                         name="email"
-                        placeholder="Email *" 
+                        placeholder="Email *"
                         className="afc-input"
                         value={formData.email}
                         onChange={handleChange}
                         disabled={isSubmitting || isFormLocked}
-                        required 
+                        required
                         style={{
                           borderColor: errors.email ? '#dc2626' : undefined
                         }}
                       />
                       {errors.email && (
-                        <p style={{ 
-                          fontSize: '0.75rem', 
-                          color: '#dc2626', 
+                        <p style={{
+                          fontSize: '0.75rem',
+                          color: '#dc2626',
                           marginTop: '0.25rem',
                           marginBottom: 0
                         }}>
@@ -394,25 +420,25 @@ const Contact = () => {
                         </p>
                       )}
                     </div>
-                    
+
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         name="telefono"
-                        placeholder="Teléfono *" 
+                        placeholder="Teléfono *"
                         className="afc-input"
                         value={formData.telefono}
                         onChange={handleChange}
                         disabled={isSubmitting || isFormLocked}
-                        required 
+                        required
                         style={{
                           borderColor: errors.telefono ? '#dc2626' : undefined
                         }}
                       />
                       {errors.telefono && (
-                        <p style={{ 
-                          fontSize: '0.75rem', 
-                          color: '#dc2626', 
+                        <p style={{
+                          fontSize: '0.75rem',
+                          color: '#dc2626',
                           marginTop: '0.25rem',
                           marginBottom: 0
                         }}>
@@ -420,18 +446,18 @@ const Contact = () => {
                         </p>
                       )}
                     </div>
-                    
-                    <input 
-                      type="text" 
+
+                    <input
+                      type="text"
                       name="despacho"
-                      placeholder="Nombre del despacho" 
+                      placeholder="Nombre del despacho"
                       className="afc-input"
                       value={formData.despacho}
                       onChange={handleChange}
                       disabled={isSubmitting || isFormLocked}
                     />
-                    
-                    <select 
+
+                    <select
                       name="comunidades"
                       className="afc-input afc-form-full-width"
                       value={formData.comunidades}
@@ -443,27 +469,27 @@ const Contact = () => {
                       <option value="11-50">11-50</option>
                       <option value="50+">50+</option>
                     </select>
-                    
-                    <input 
-                      type="text" 
+
+                    <input
+                      type="text"
                       name="automatizar"
-                      placeholder="¿Qué te gustaría automatizar primero?" 
+                      placeholder="¿Qué te gustaría automatizar primero?"
                       className="afc-input afc-form-full-width"
                       value={formData.automatizar}
                       onChange={handleChange}
                       disabled={isSubmitting || isFormLocked}
                     />
                   </div>
-                  
+
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginTop: '0.5rem' }}>
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       name="acepto"
                       checked={formData.acepto}
                       onChange={handleChange}
                       disabled={isSubmitting || isFormLocked}
-                      required 
-                      style={{ 
+                      required
+                      style={{
                         marginTop: '4px',
                         width: '16px',
                         height: '16px',
@@ -475,28 +501,28 @@ const Contact = () => {
                     </label>
                   </div>
 
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={isSubmitting || isFormLocked}
                     className="afc-button"
                     style={{ marginTop: '1rem' }}
                   >
                     {isSubmitting ? 'Enviando...' : isFormLocked ? 'Enviado' : 'Solicitar Clase Gratuita'}
                   </button>
-                  
-                  <p style={{ 
-                    fontSize: '0.875rem', 
-                    textAlign: 'center', 
+
+                  <p style={{
+                    fontSize: '0.875rem',
+                    textAlign: 'center',
                     color: '#9ca3af',
                     marginTop: '0.5rem'
                   }}>
                     Respuesta en menos de 24h. Sin compromiso.
                   </p>
-                  
+
                   {submitStatus === 'success' && (
-                    <div style={{ 
-                      textAlign: 'center', 
-                      color: '#059669', 
+                    <div style={{
+                      textAlign: 'center',
+                      color: '#059669',
                       fontWeight: '600',
                       background: '#d1fae5',
                       padding: '1rem',
@@ -506,11 +532,11 @@ const Contact = () => {
                       ¡Gracias! Te contactaremos pronto.
                     </div>
                   )}
-                  
+
                   {submitStatus === 'invalid-email' && (
-                    <div style={{ 
-                      textAlign: 'center', 
-                      color: '#dc2626', 
+                    <div style={{
+                      textAlign: 'center',
+                      color: '#dc2626',
                       fontWeight: '600',
                       background: '#fee2e2',
                       padding: '1rem',
@@ -520,11 +546,11 @@ const Contact = () => {
                       Por favor introduce un email válido.
                     </div>
                   )}
-                  
+
                   {submitStatus === 'invalid-phone' && (
-                    <div style={{ 
-                      textAlign: 'center', 
-                      color: '#dc2626', 
+                    <div style={{
+                      textAlign: 'center',
+                      color: '#dc2626',
                       fontWeight: '600',
                       background: '#fee2e2',
                       padding: '1rem',
@@ -534,11 +560,11 @@ const Contact = () => {
                       El teléfono debe ser español y tener 9 dígitos.
                     </div>
                   )}
-                  
+
                   {submitStatus === 'bot-detected' && (
-                    <div style={{ 
-                      textAlign: 'center', 
-                      color: '#dc2626', 
+                    <div style={{
+                      textAlign: 'center',
+                      color: '#dc2626',
                       fontWeight: '600',
                       background: '#fee2e2',
                       padding: '1rem',
@@ -548,11 +574,11 @@ const Contact = () => {
                       No se pudo procesar la solicitud. (Código B01)
                     </div>
                   )}
-                  
+
                   {submitStatus === 'too-many' && (
-                    <div style={{ 
-                      textAlign: 'center', 
-                      color: '#dc2626', 
+                    <div style={{
+                      textAlign: 'center',
+                      color: '#dc2626',
                       fontWeight: '600',
                       background: '#fee2e2',
                       padding: '1rem',
@@ -562,11 +588,11 @@ const Contact = () => {
                       Has enviado demasiadas solicitudes. Espera 1 minuto.
                     </div>
                   )}
-                  
+
                   {submitStatus === 'error' && (
-                    <div style={{ 
-                      textAlign: 'center', 
-                      color: '#dc2626', 
+                    <div style={{
+                      textAlign: 'center',
+                      color: '#dc2626',
                       fontWeight: '600',
                       background: '#fee2e2',
                       padding: '1rem',

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a AFCademIA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 0;
+            text-align: center;
+        }
+
+        .header img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .content h2 {
+            color: #003865;
+            font-size: 20px;
+            margin-top: 0;
+        }
+
+        .content p {
+            font-size: 16px;
+            color: #4b5563;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box {
+            background-color: #fef3c7;
+            border-left: 4px solid #f97316;
+            padding: 15px;
+            margin: 25px 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: #f97316;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            padding: 30px;
+            text-align: center;
+            background-color: #f9fafb;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .footer a {
+            color: #f97316;
+            text-decoration: none;
+        }
+
+        .social-icons {
+            margin-top: 15px;
+        }
+
+        .social-icons img {
+            width: 24px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="https://afcademia.com" style="text-decoration: none; display: block;">
+                <img src="https://afcademia.com/afcademia_header_email.png" alt="AFCademIA" border="0"
+                    style="width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto;">
+            </a>
+        </div>
+
+        <div class="content">
+            <h2>Hola {{ $json.nombre }},</h2>
+
+            <p>Es un placer saludarte. Hemos recibido tu solicitud desde <strong>{{ $json.empresa_nombre }}</strong>
+                para acceder a nuestra formación exclusiva sobre IA aplicada a la administración de fincas.</p>
+
+            <p>Queremos asegurarnos de que eres una persona real y que realmente tienes interés en transformar tu
+                despacho (con tus {{ $json.num_comunidades }} comunidades) antes de enviarte el acceso directo.</p>
+
+            <div class="highlight-box" style="text-align: center; border-left: none; border-top: 4px solid #f97316;">
+                <p style="font-size: 18px; color: #003865; font-weight: 600;">🚀 Para recibir ahora mismo el enlace a la
+                    clase gratuita, simplemente <strong>responde a este email</strong> con la palabra:</p>
+                <h2 style="font-size: 42px; color: #f97316; margin: 15px 0; letter-spacing: 5px;">IA</h2>
+            </div>
+
+            <p>En cuanto recibamos tu respuesta, nuestro sistema te enviará automáticamente el vídeo de la sesión y el
+                material adicional.</p>
+
+            {{ $json.objetivo_automatizacion ? '<p>Además, he visto que te interesa especialmente: <em>"' +
+                    $json.objetivo_automatizacion + '"</em>. Te enviaré un recurso extra sobre este punto justo después.
+            </p>' : '' }}
+
+            <p>Quedo a la espera de tu respuesta para enviarte todo el material.</p>
+
+            <p>Un saludo,<br><strong>El equipo de AFCademIA</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 AFCademIA. Todos los derechos reservados.</p>
+            <p>Transformando la Administración de Fincas con Inteligencia Artificial.</p>
+            <p>
+                <a href="https://afcademia.com/privacidad#politica-privacidad-title">Política de Privacidad</a> |
+                <a href="mailto:info@afcademia.com">Soporte</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
