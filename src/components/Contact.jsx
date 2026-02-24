@@ -147,6 +147,7 @@ const Contact = () => {
           lead_id: leadId,
           nombre_flujo: 'formulario web',
           status_actual: 'nuevo',
+          actividad: 'lead_inactivo',
           tags_proceso: ['nuevo']
         }]);
 
