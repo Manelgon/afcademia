@@ -9,6 +9,7 @@ const Contact = () => {
     despacho: '',
     comunidades: '',
     automatizar: '',
+    interes_fundae: false,
     acepto: false,
     website: ''
   });
@@ -135,7 +136,8 @@ const Contact = () => {
         .upsert([{
           lead_id: leadId,
           num_comunidades: formData.comunidades,
-          objetivo_automatizacion: formData.automatizar
+          objetivo_automatizacion: formData.automatizar,
+          interes_fundae: formData.interes_fundae
         }], { onConflict: 'lead_id' });
 
       if (segError) console.error('Error en segmentación:', segError);
@@ -164,6 +166,7 @@ const Contact = () => {
         despacho: '',
         comunidades: '',
         automatizar: '',
+        interes_fundae: false,
         acepto: false,
         website: ''
       });
@@ -312,6 +315,34 @@ const Contact = () => {
         .afc-button:disabled {
           background: #fed7aa !important;
           cursor: not-allowed !important;
+        }
+        /* Switch toggle */
+        .afc-switch-track {
+          position: relative;
+          width: 44px;
+          height: 24px;
+          background: #d1d5db;
+          border-radius: 9999px;
+          cursor: pointer;
+          transition: background 0.2s;
+          flex-shrink: 0;
+        }
+        .afc-switch-track.active {
+          background: #f97316;
+        }
+        .afc-switch-thumb {
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 20px;
+          height: 20px;
+          background: white;
+          border-radius: 9999px;
+          transition: transform 0.2s;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .afc-switch-track.active .afc-switch-thumb {
+          transform: translateX(20px);
         }
       `}</style>
 
@@ -466,10 +497,35 @@ const Contact = () => {
                       disabled={isSubmitting || isFormLocked}
                     >
                       <option value="">¿Cuántas comunidades gestionas?</option>
-                      <option value="1-10">1-10</option>
-                      <option value="11-50">11-50</option>
-                      <option value="50+">50+</option>
+                      <option value="-50">Menos de 50</option>
+                      <option value="50-100">Más de 50, menos de 100</option>
+                      <option value="100+">Más de 100</option>
                     </select>
+
+                    {/* Switch Interés Fundae */}
+                    <div className="afc-form-full-width" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '4px 0' }}>
+                      <div
+                        className={`afc-switch-track ${formData.interes_fundae ? 'active' : ''}`}
+                        onClick={() => {
+                          if (!isSubmitting && !isFormLocked) {
+                            setFormData(prev => ({ ...prev, interes_fundae: !prev.interes_fundae }));
+                          }
+                        }}
+                        role="switch"
+                        aria-checked={formData.interes_fundae}
+                      >
+                        <div className="afc-switch-thumb" />
+                      </div>
+                      <label style={{ fontSize: '0.875rem', color: '#374151', fontWeight: '500', cursor: 'pointer' }}
+                        onClick={() => {
+                          if (!isSubmitting && !isFormLocked) {
+                            setFormData(prev => ({ ...prev, interes_fundae: !prev.interes_fundae }));
+                          }
+                        }}
+                      >
+                        ¿Te interesa la formación bonificada con Fundae?
+                      </label>
+                    </div>
 
                     <input
                       type="text"
